@@ -22,12 +22,12 @@ platform :ios do
   end
 
   desc "Build and upload the example app to TestFlight"
-  lane :testflight do
+  lane :upload_testflight do
     # App Store Connect API key via GitHub Secrets (base64 p8 content recommended)
     api_key = app_store_connect_api_key(
       key_id: ENV['ASC_KEY_ID'],
       issuer_id: ENV['ASC_ISSUER_ID'],
-      key: ENV['ASC_KEY'],
+      key_content: ENV['ASC_KEY_BASE64'],
       is_key_content_base64: true
     )
 

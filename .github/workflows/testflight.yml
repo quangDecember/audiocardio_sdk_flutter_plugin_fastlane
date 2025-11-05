@@ -61,5 +61,5 @@ jobs:
         working-directory: example/ios
         env:
           FLUTTER_BUILD_NUMBER: ${{ steps.buildnum.outputs.num }}
-        run: fastlane ios testflight
+        run: fastlane ios upload_testflight
 
