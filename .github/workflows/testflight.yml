@@ -17,7 +17,7 @@ jobs:
       # App Store Connect API key (required)
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-      ASC_KEY: ${{ secrets.ASC_KEY_BASE64 }} # base64-encoded contents of the .p8 key
+      ASC_KEY_BASE64: ${{ secrets.ASC_KEY_BASE64 }} # base64-encoded contents of the .p8 key
       # Your bundle id (override here if different)
       APP_IDENTIFIER: com.audiocardio.sdk.example
       FLUTTER_CHANNEL: stable
