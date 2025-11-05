@@ -48,29 +48,6 @@ jobs:
         working-directory: example/ios
         run: pod install --repo-update
 
-      - name: Install signing certificate (optional)
-        if: ${{ secrets.IOS_CERT_P12_BASE64 != '' }}
-        run: |
-          echo "$IOS_CERT_P12_BASE64" | base64 --decode > cert.p12
-          security create-keychain -p "" build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p "" build.keychain
-          security set-keychain-settings -lut 21600 build.keychain
-          security import cert.p12 -k build.keychain -P "$IOS_CERT_PASSWORD" -T /usr/bin/codesign
-        env:
-          IOS_CERT_P12_BASE64: ${{ secrets.IOS_CERT_P12_BASE64 }}
-          IOS_CERT_PASSWORD: ${{ secrets.IOS_CERT_PASSWORD }}
-
-      - name: Install provisioning profile (optional)
-        if: ${{ secrets.IOS_PROFILE_BASE64 != '' }}
-        run: |
-          echo "$IOS_PROFILE_BASE64" | base64 --decode > profile.mobileprovision
-          PROFILE_UUID=$(/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< "$(security cms -D -i profile.mobileprovision 2>/dev/null)")
-          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
-          cp profile.mobileprovision "$HOME/Library/MobileDevice/Provisioning Profiles/$PROFILE_UUID.mobileprovision"
-        env:
-          IOS_PROFILE_BASE64: ${{ secrets.IOS_PROFILE_BASE64 }}
-
       - name: Compute build number
         id: buildnum
         run: |
