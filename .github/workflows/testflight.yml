@@ -1,0 +1,88 @@
+name: iOS TestFlight
+
+on:
+  workflow_dispatch:
+    inputs:
+      build-number:
+        description: Optional build number override
+        required: false
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build-and-upload:
+    runs-on: macos-14
+    env:
+      # App Store Connect API key (required)
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY: ${{ secrets.ASC_KEY_BASE64 }} # base64-encoded contents of the .p8 key
+      # Your bundle id (override here if different)
+      APP_IDENTIFIER: com.audiocardio.sdk.example
+      FLUTTER_CHANNEL: stable
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.4'
+
+      - name: Install Homebrew tools
+        run: |
+          brew update
+          brew install fastlane cocoapods
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+
+      - name: Flutter pub get
+        working-directory: example
+        run: flutter pub get
+
+      - name: Pod install
+        working-directory: example/ios
+        run: pod install --repo-update
+
+      - name: Install signing certificate (optional)
+        if: ${{ secrets.IOS_CERT_P12_BASE64 != '' }}
+        run: |
+          echo "$IOS_CERT_P12_BASE64" | base64 --decode > cert.p12
+          security create-keychain -p "" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security set-keychain-settings -lut 21600 build.keychain
+          security import cert.p12 -k build.keychain -P "$IOS_CERT_PASSWORD" -T /usr/bin/codesign
+        env:
+          IOS_CERT_P12_BASE64: ${{ secrets.IOS_CERT_P12_BASE64 }}
+          IOS_CERT_PASSWORD: ${{ secrets.IOS_CERT_PASSWORD }}
+
+      - name: Install provisioning profile (optional)
+        if: ${{ secrets.IOS_PROFILE_BASE64 != '' }}
+        run: |
+          echo "$IOS_PROFILE_BASE64" | base64 --decode > profile.mobileprovision
+          PROFILE_UUID=$(/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< "$(security cms -D -i profile.mobileprovision 2>/dev/null)")
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          cp profile.mobileprovision "$HOME/Library/MobileDevice/Provisioning Profiles/$PROFILE_UUID.mobileprovision"
+        env:
+          IOS_PROFILE_BASE64: ${{ secrets.IOS_PROFILE_BASE64 }}
+
+      - name: Compute build number
+        id: buildnum
+        run: |
+          if [[ -n "${{ github.event.inputs.build-number }}" ]]; then
+            echo "num=${{ github.event.inputs.build-number }}" >> $GITHUB_OUTPUT
+          else
+            echo "num=${GITHUB_RUN_NUMBER}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Fastlane TestFlight
+        working-directory: example/ios
+        env:
+          FLUTTER_BUILD_NUMBER: ${{ steps.buildnum.outputs.num }}
+        run: fastlane ios testflight
+

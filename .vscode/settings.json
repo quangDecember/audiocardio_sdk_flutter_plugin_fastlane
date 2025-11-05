@@ -1,0 +1,19 @@
+{
+    "files.exclude": {
+        "**/.symlinks": true,
+        "**/Build": true,
+        "example/build": true
+    },
+    "search.exclude": {
+        "**/.symlinks/**": true,
+        "**/Build/**": true,
+        "example/build/**": true
+    },
+    "files.watcherExclude": {
+        "**/.symlinks/**": true,
+        "**/Build/**": true,
+        "example/build/**": true
+    }
+}
+
+
