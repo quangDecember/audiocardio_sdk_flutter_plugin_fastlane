@@ -37,7 +37,8 @@ platform :ios do
     # Install CocoaPods (uses system CocoaPods on CI)
     cocoapods(
       clean_install: true,
-      podfile: "Podfile"
+      podfile: "Podfile",
+      use_bundle_exec: false
     )
 
     # Build the app for App Store distribution

@@ -33,7 +33,16 @@ jobs:
       - name: Install Homebrew tools
         run: |
           brew update
-          brew install fastlane cocoapods
+          if ! command -v fastlane >/dev/null 2>&1; then
+            brew install fastlane
+          else
+            echo "fastlane already installed"
+          fi
+          if ! command -v pod >/dev/null 2>&1; then
+            brew install cocoapods
+          else
+            echo "cocoapods already installed"
+          fi
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
