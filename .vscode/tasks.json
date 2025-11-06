@@ -1,0 +1,44 @@
+{
+    // Task to generate FFI bindings before launching certain Dart configs
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "refresh_env",
+            "type": "shell",
+            "command": "source ~/.zshrc",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ffigen",
+            "type": "shell",
+            "command": "dart run ffigen --config ffigen.yaml",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "refresh_sdk_binaries",
+            "type": "shell",
+            "command": "flutter clean && flutter pub get && cd example && flutter clean && flutter pub get && cd ios && pod install && cd ../..",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PATH": "/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby/bin:${env:PATH}"
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "after_download_sdk",
+            "dependsOn": [
+                "ffigen",
+                "refresh_sdk_binaries"
+            ],
+            "dependsOrder": "sequence"
+        }
+    ]
+}

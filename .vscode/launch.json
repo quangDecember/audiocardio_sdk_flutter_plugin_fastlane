@@ -10,6 +10,10 @@
             "cwd": "example",
             "request": "launch",
             "type": "dart",
+            "preLaunchTask": "refresh_env",
+            "env": {
+                "PATH": "/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby/bin:${env:PATH}"
+            },
             "args": [
                 "--dart-define=KEY_ENV=env_key_1"
             ]
