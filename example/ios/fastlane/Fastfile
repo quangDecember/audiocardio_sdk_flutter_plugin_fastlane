@@ -32,7 +32,7 @@ platform :ios do
     )
 
     # App identifier can be overridden via env var
-    bundle_id = (ENV['APP_IDENTIFIER'] || 'com.audiocardio.sdk.example')
+    bundle_id = (ENV['APP_IDENTIFIER'] || 'ha.quang.reward.testapp')
     team_id = ENV['APPLE_TEAM_ID']
     profile_name = ENV['PROFILE_NAME']
 
