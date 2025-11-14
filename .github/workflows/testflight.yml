@@ -19,7 +19,7 @@ jobs:
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
       ASC_KEY_BASE64: ${{ secrets.ASC_KEY_BASE64 }} # base64-encoded contents of the .p8 key
       # Your bundle id (override here if different)
-      APP_IDENTIFIER: com.audiocardio.sdk.example
+      APP_IDENTIFIER: ha.quang.reward.testapp
       # Apple Developer Team ID (for manual signing)
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       FLUTTER_CHANNEL: stable
