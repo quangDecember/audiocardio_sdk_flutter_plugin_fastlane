@@ -31,14 +31,14 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Set up Ruby 3.0 with bundler cache
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
           bundler-cache: true
-          working-directory: example/ios
+          working-directory: 'example/ios'
 
       - name: Print Fastlane environment context
         working-directory: example/ios
