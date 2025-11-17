@@ -39,6 +39,26 @@ jobs:
           echo "pwd=$(pwd)"
           echo "ruby=$(ruby -v)"
           echo "bundle=$(bundle -v)"
+          echo "env output:"
+          env | sort
+          if command -v pod >/dev/null 2>&1; then
+            echo "which pod=$(which pod)"
+            pod --version
+          else
+            echo "pod command not found"
+          fi
+          if command -v brew >/dev/null 2>&1; then
+            echo "which brew=$(which brew)"
+            brew --version
+          else
+            echo "brew command not found"
+          fi
+          if command -v xcodebuild >/dev/null 2>&1; then
+            echo "Xcode version:"
+            xcodebuild -version
+          else
+            echo "xcodebuild command not found"
+          fi
           for var in APP_STORE_CONNECT_TEAM_ID DEVELOPER_APP_ID DEVELOPER_APP_IDENTIFIER DEVELOPER_PORTAL_TEAM_ID FASTLANE_APPLE_ID MATCH_PASSWORD PROVISIONING_PROFILE_SPECIFIER TEMP_KEYCHAIN_USER TEMP_KEYCHAIN_PASSWORD APPLE_KEY_ID APPLE_ISSUER_ID; do
             value="${!var}"
             if [ -z "$value" ]; then
