@@ -32,6 +32,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      # Install Flutter
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'   # or a specific version you use
       
       - name: Print Fastlane environment context
         working-directory: example/ios
@@ -67,7 +72,9 @@ jobs:
               echo "$var=$value"
             fi
           done
-
+      - name: Flutter pub get
+        working-directory: example
+        run: flutter pub get
       # - name: Set up Ruby 3.3 with bundler cache
       #   uses: ruby/setup-ruby@v1
       #   with:
