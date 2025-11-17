@@ -50,6 +50,9 @@ platform :ios do
       clean_install: true
     )
 
+    # Regenerate Flutter iOS configs for the current machine/CI path
+    sh("cd .. && flutter build ios --release --no-codesign")
+
     match(
       type: 'appstore',
       app_identifier: "#{DEVELOPER_APP_IDENTIFIER}",
