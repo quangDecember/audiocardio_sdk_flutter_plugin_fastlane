@@ -68,12 +68,12 @@ jobs:
             fi
           done
 
-      - name: Set up Ruby 3.3 with bundler cache
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
-          bundler-cache: true
-          working-directory: 'example/ios'
+      # - name: Set up Ruby 3.3 with bundler cache
+      #   uses: ruby/setup-ruby@v1
+      #   with:
+      #     ruby-version: '3.3'
+      #     bundler-cache: true
+      #     working-directory: 'example/ios'
 
       - name: Deploy iOS Beta to TestFlight via Fastlane
         uses: maierj/fastlane-action@v3.1.0
