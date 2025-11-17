@@ -36,7 +36,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'   # or a specific version you use
+          channel: 'stable'   # or a specific version you use
       
       - name: Print Fastlane environment context
         working-directory: example/ios
