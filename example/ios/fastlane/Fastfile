@@ -49,13 +49,15 @@ platform :ios do
       xcodeproj: "Runner.xcodeproj",
       build_number: build_number
     )
-    
+
     cocoapods(
       clean_install: true
     )
 
+    UI.message("Using build number #{build_number} for iOS build")
+
     # Regenerate Flutter iOS configs for the current machine/CI path
-    sh("cd .. && flutter build ios --release --no-codesign")
+    sh("cd .. && flutter build ios --release --no-codesign --build-number=#{build_number}")
 
     match(
       type: 'appstore',
